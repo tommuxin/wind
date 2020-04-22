@@ -1,9 +1,11 @@
-package wind.kafka;
+package wind.test_usb;
 
 import gnu.io.*;
 import wind.Interface.Write_usb;
+import wind.Until.ArrayUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -12,7 +14,9 @@ public class test_write_usb implements Write_usb {
     public static String portName;
     public static int baudrate;
     public static ArrayList<String> resu;
+    public static int count1=0;
 
+    public static String re_msg="第一次发送";
 
     public test_write_usb(String portName, int baudrate) {
         this.portName = portName;
@@ -48,12 +52,33 @@ public class test_write_usb implements Write_usb {
     }
 
     @Override
-    public void sendToPort(SerialPort serialPort, byte[] order) {
+    public String sendToPort(SerialPort serialPort, byte[] order) {
         OutputStream out = null;
+        InputStream in = null;
+        byte[] bytes = {};
+         ArrayList<String> send_msg=new ArrayList<String>();
+        String re=null;
+        int count=0;
+
         try {
             out = serialPort.getOutputStream();
             out.write(order);
             out.flush();
+            out.close();
+            in=serialPort.getInputStream();
+
+            in.close();
+            byte[] readBuffer1 = new byte[1];
+            int bytesNum = in.read(readBuffer1);
+            while (bytesNum >0) {
+                bytes = ArrayUtils.concat(bytes, readBuffer1);
+                bytesNum = in.read(readBuffer1);
+                re_msg=new String(bytes);
+            }
+            System.out.println("已被消费："+re_msg );
+            in.close();
+            out.flush();
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -66,6 +91,7 @@ public class test_write_usb implements Write_usb {
                 e.printStackTrace();
             }
         }
+        return  re_msg;
     }
 
     @Override
@@ -79,10 +105,13 @@ public class test_write_usb implements Write_usb {
     public static void main(String[] args) {
         test_write_usb usb_write = new test_write_usb("COM3", 115200);
         SerialPort serialPort1 = usb_write.openPort();
+String re1=null;
         for (int i = 0; i < 10; i++) {
 
-            usb_write.sendToPort(serialPort1, (("tom" + i) + "," + 10 + i + "," + i + 1 + "\n").getBytes());
+          re1=   usb_write.sendToPort(serialPort1, (("tom" + i) + "," + i + "," + i  + ",tom"+"-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------你好---------------------------------------------------"+"cehis"+"deee"+"-------------\n").getBytes());
+
         }
+     System.out.println(re1);
         usb_write.closePort(serialPort1);
 
     }

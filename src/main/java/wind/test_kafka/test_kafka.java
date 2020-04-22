@@ -1,11 +1,8 @@
-package wind.kafka;
+package wind.test_kafka;
 
-import org.apache.kafka.common.TopicPartition;
-import wind.Until.ConfigUntil;
 import wind.Until.KafkaUtil;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class test_kafka {

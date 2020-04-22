@@ -1,4 +1,4 @@
-package wind.kafka;
+package wind.test_kafka;
 
 import org.apache.kafka.common.TopicPartition;
 import wind.Until.ConfigUntil;

@@ -1,4 +1,4 @@
-package wind.kafka;
+package wind.test_usb;
 
 import gnu.io.*;
 import wind.Until.ArrayUtils;
@@ -17,7 +17,6 @@ public class test_read_usb implements Read_usb {
     public static String portName;
     public static int baudrate;
     public static ArrayList<String> resu;
-
 
 
     public test_read_usb(String portName, int baudrate) {
@@ -72,6 +71,7 @@ public class test_read_usb implements Read_usb {
             }
         }
     }
+
     @Override
     public byte[] readFromPort(SerialPort serialPort) {
         InputStream in = null;
@@ -111,9 +111,9 @@ public class test_read_usb implements Read_usb {
 
                 String msg = null;
                 String[] msg1 = null;
-                byte[] data=null;
-                int scuss=0;
-long total=0;
+                byte[] data = null;
+                int scuss = 0;
+                long total = 0;
                 try {
                     if (serialPort == null) {
                         ShowUtils.errorMessage("串口对象为空，监听失败！");
@@ -131,9 +131,9 @@ long total=0;
                        }*/
                         //批量插入kafka
                         scuss = ka1.insertTopic("test1", "1", msg1);
-                        total=msg1.length;
+                        total = msg1.length;
                         if (scuss == 1) {
-                            sendToPort(serialPort,("消费总数据："+total).getBytes());
+                            sendToPort(serialPort, ("成功").getBytes());
                             //清理list，防止占用内存
                             msg1 = null;
                         }

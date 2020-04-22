@@ -1,4 +1,4 @@
-package wind.hbase;
+package wind.test_hbase;
 
 
 import wind.Until.HbaseUntil;

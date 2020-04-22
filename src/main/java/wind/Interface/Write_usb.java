@@ -26,7 +26,7 @@ public interface Write_usb {
      * @param order
      *            待发送数据
      */
-    public  void sendToPort(SerialPort serialPort, byte[] order);
+    public   String sendToPort(SerialPort serialPort, byte[] order);
 
     /**
      * 关闭串口
