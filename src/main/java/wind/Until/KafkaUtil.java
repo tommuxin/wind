@@ -150,7 +150,21 @@ public class KafkaUtil {
         System.out.println("关闭生产者......");
 
     }
+    public void insertTopic(String topic_name, String partion_id, String[] list_re) {
 
+        producer = new KafkaProducer<>(kafka_properties);
+
+        for (int i = 0; i < list_re.length; i++) {
+            //构造好kafkaProducer实例以后，下一步就是构造消息实例。
+            producer.send(new ProducerRecord<String, String>(topic_name, partion_id, list_re[i].toString()));
+        }
+        System.out.println("消息生产结束......");
+        // 关闭kafkaProduce对象
+        producer.close();
+
+        System.out.println("关闭生产者......");
+
+    }
     /**
      * 全量消费topic消息
      * topic_name 指定要消费的topic名字
@@ -180,7 +194,7 @@ public class KafkaUtil {
                 //消费100条就打印 ,但打印的数据不一定是这个规律的
                 // if(messageNo%100==0){
                 result.add(record.value());
-                System.out.println("partition =" + record.partition() + ",key =" + record.key() + ", value = " + record.value() + " offset===" + record.offset());
+               // System.out.println("partition =" + record.partition() + ",key =" + record.key() + ", value = " + record.value() + " offset===" + record.offset());
                 //}
                 //当消费了1000条就退出
                 // if(messageNo%1000==0){
@@ -226,7 +240,7 @@ public class KafkaUtil {
                 //消费100条就打印 ,但打印的数据不一定是这个规律的
                 // if(messageNo%100==0){
                 result.add(record.value());
-                System.out.println("partition =" + record.partition() + ",key =" + record.key() + ", value = " + record.value() + " offset===" + record.offset());
+               // System.out.println("partition =" + record.partition() + ",key =" + record.key() + ", value = " + record.value() + " offset===" + record.offset());
                 //}
                 //当消费了1000条就退出
                 // if(messageNo%1000==0){

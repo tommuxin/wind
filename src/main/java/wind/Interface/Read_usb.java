@@ -4,6 +4,7 @@ import gnu.io.SerialPort;
 import wind.Until.KafkaUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface Read_usb {
 
@@ -45,7 +46,7 @@ public interface Read_usb {
      *            当前已建立连接的SerialPort对象
      * @return 读取到的数据
      */
-    public  byte[] readFromPort(SerialPort serialPort) throws IOException;
+    public byte[] readFromPort(SerialPort serialPort) throws IOException;
     /**
      * 添加监听器
      *

@@ -31,18 +31,18 @@ public class test_kafka {
         ArrayList<String> cc = yy2.coll(1000);
 
 
-//kaf.deleteTopics("test1");
-        //kaf.createTopics("test1",3,1);
+//kaf.deleteTopics("test2");
+       //kaf.createTopics("test1",3,1);
         //-1 =0 0=2
         //kaf.insertTopic("test1",cc);
      //kaf.insert_Topic_partition("test1", "2", cc);
        // kaf.insertTopic("test1",cc);
-    ArrayList rt=kaf.cousumertopic("test1","0","nimei","earliest");
+   ArrayList rt=kaf.cousumertopic("test1","1","nimei","earliest");
         for (int r=0;r<rt.size();r++)
         {
             System.out.println(rt.get(r));
         }
-        //kaf.describetopics("test1");
+        //kaf.describetopics("test2");
  //long tt= kaf.getPartitionsOffset("test1",2);
 
 

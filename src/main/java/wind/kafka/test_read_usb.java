@@ -59,7 +59,8 @@ public class test_read_usb implements Read_usb {
             in = serialPort.getInputStream();
             // 缓冲区大小为一个字节
             byte[] readBuffer = new byte[1];
-            int bytesNum = in.read(readBuffer);
+            int bytesNum = in.read(readBuffer,0,1);
+
             while (bytesNum > 0) {
                 bytes = ArrayUtils.concat(bytes, readBuffer);
                 bytesNum = in.read(readBuffer);
@@ -88,6 +89,8 @@ public class test_read_usb implements Read_usb {
             serialPort.addEventListener(new SerialPortListener(() -> {
                 byte[] data = null;
                 String msg = null;
+                String[] msg1 = null;
+
 
 
                 try {
@@ -98,18 +101,16 @@ public class test_read_usb implements Read_usb {
                         data = readFromPort(serialPort);
                         msg = new String(data);
 
+                        //定义分隔符，这边测试用换行符，实际某些字段中会存在换行符导致字段错乱
+                       msg1=msg.split("\n");
+                     /*  for (int i=0;i<msg1.length;i++){
 
-                        //ka1.insertTopic("test1", msg);
-                        System.out.println(msg + "\r" + result.size());
-                        //将数据流先暂存至list中，做简单缓存
-                        result.add(msg);
-                        //count数达到一定量级写入kafka
-                        if (result.size() > count) {
-                            ka1.insertTopic("test1", result);
+                           System.out.println(msg1[i]);
+
+                       }*/
+                        ka1.insertTopic("test1","1", msg1);
                             //清理list，防止占用内存
-                            result.clear();
-                        }
-
+msg1=null;
                     }
                 } catch (Exception e) {
                     ShowUtils.errorMessage(e.toString());
