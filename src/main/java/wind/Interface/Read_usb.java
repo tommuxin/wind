@@ -48,21 +48,25 @@ public interface Read_usb {
      */
     public byte[] readFromPort(SerialPort serialPort) throws IOException;
     /**
-     * 添加监听器
+     * 串口发送数据
      *
      * @param port
      *            串口对象
-     * @param listener
-     *            串口存在有效数据监听
+     * @param order
+     *            需要发送的数据字节流
      */
+
+
+    public void sendToPort(SerialPort serialPort, byte[] order);
     /**
      * 添加监听器
      *
-     * @count 多少条提交一次
+     * @count 只要监听到数据，立马开始提交数据程序
      *
      * @param
      *
      */
-    public void addListener(SerialPort serialPort, KafkaUtil ka1,int count);
+    public void addListener(SerialPort serialPort, KafkaUtil ka1);
+
 
 }
