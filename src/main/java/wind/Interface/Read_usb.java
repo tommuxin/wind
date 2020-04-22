@@ -59,7 +59,7 @@ public interface Read_usb {
 
     public void sendToPort(SerialPort serialPort, byte[] order);
     /**
-     * 添加监听器
+     * 添加监听器，m默认
      *
      * @count 只要监听到数据，立马开始提交数据程序
      *
