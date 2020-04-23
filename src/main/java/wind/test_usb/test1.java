@@ -87,7 +87,7 @@ public class test1 {
         }
     }
     public static void main(String[] args) throws IOException {
-        test1 usb_write = new test1("/dev/ttyUSB0", 115200);
+  /*      test1 usb_write = new test1("/dev/ttyUSB0", 115200);
 ///dev/ttyUSB0
 
         SerialPort serialPort1 = usb_write.openPort();
@@ -99,8 +99,11 @@ public class test1 {
 
         }
 
-serialPort1.close();
-
+serialPort1.close();*/
+StringBuffer yy=new StringBuffer();
+yy.append("nimei");
+yy.append(23);
+System.out.println(yy.toString().length());
     }
 
 }
