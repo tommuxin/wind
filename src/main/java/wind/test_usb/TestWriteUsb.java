@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-public class test_write_usb implements Write_usb {
+public class TestWriteUsb implements Write_usb {
 
     public static String portName;
     public static int baudrate;
@@ -18,7 +18,7 @@ public class test_write_usb implements Write_usb {
 
     public static String re_msg="第一次发送";
 
-    public test_write_usb(String portName, int baudrate) {
+    public TestWriteUsb(String portName, int baudrate) {
         this.portName = portName;
         this.baudrate = baudrate;
     }
@@ -103,7 +103,7 @@ public class test_write_usb implements Write_usb {
 
 
     public static void main(String[] args) {
-        test_write_usb usb_write = new test_write_usb("COM3", 115200);
+        TestWriteUsb usb_write = new TestWriteUsb("COM3", 115200);
         SerialPort serialPort1 = usb_write.openPort();
 String re1=null;
         for (int i = 0; i < 10; i++) {

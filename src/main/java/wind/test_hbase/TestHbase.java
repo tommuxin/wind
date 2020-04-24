@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class test_hbase {
+public class TestHbase {
 
     ArrayList<String> ty = new ArrayList<String>();
 
@@ -21,7 +21,7 @@ public class test_hbase {
 
     public static void main(String args[]) throws ExecutionException, InterruptedException, IOException {
         HbaseUntil yy1 = new HbaseUntil();
-        test_hbase yy2 = new test_hbase();
+        TestHbase yy2 = new TestHbase();
         ArrayList<String> cc = yy2.coll(1000);
         yy1.createTable("table1", "t1");
         String[] name1 = new String[2];

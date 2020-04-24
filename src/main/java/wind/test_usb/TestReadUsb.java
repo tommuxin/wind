@@ -12,14 +12,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
-public class test_read_usb implements Read_usb {
+public class TestReadUsb implements Read_usb {
 
     public static String portName;
     public static int baudrate;
     public static ArrayList<String> resu;
 
 
-    public test_read_usb(String portName, int baudrate) {
+    public TestReadUsb(String portName, int baudrate) {
         this.portName = portName;
         this.baudrate = baudrate;
     }
@@ -58,6 +58,7 @@ public class test_read_usb implements Read_usb {
             out = serialPort.getOutputStream();
             out.write(order);
             out.flush();
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -86,6 +87,7 @@ public class test_read_usb implements Read_usb {
                 bytes = ArrayUtils.concat(bytes, readBuffer);
                 bytesNum = in.read(readBuffer);
             }
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -113,14 +115,14 @@ public class test_read_usb implements Read_usb {
                 String[] msg1 = null;
                 byte[] data = null;
                 int scuss = 0;
-                long total = 0;
                 try {
                     if (serialPort == null) {
                         ShowUtils.errorMessage("串口对象为空，监听失败！");
                     } else {
                         // 读取串口数据
                         data = readFromPort(serialPort);
-                        msg = new String(data);
+                        //设置字符集
+                        msg = new String(data,"UTF-8");
 
                         //定义分隔符，这边测试用换行符，实际某些字段中会存在换行符导致字段错乱
                         msg1 = msg.split("\n");
@@ -131,9 +133,12 @@ public class test_read_usb implements Read_usb {
                        }*/
                         //批量插入kafka
                         scuss = ka1.insertTopic("test1", "1", msg1);
-                        total = msg1.length;
                         if (scuss == 1) {
-                            sendToPort(serialPort, ("成功").getBytes());
+                            sendToPort(serialPort, ("成功eeeeeeeee").getBytes());
+                            //清理list，防止占用内存
+                            msg1 = null;
+                        } else {
+                            sendToPort(serialPort, ("失败").getBytes());
                             //清理list，防止占用内存
                             msg1 = null;
                         }
@@ -225,7 +230,7 @@ public class test_read_usb implements Read_usb {
 
     public static void main(String[] args) {
         KafkaUtil kaf = new KafkaUtil();
-        test_read_usb rt = new test_read_usb("COM3", 115200);
+        TestReadUsb rt = new TestReadUsb("COM3", 115200);
         SerialPort serialPort1 = rt.openPort();
         rt.addListener(serialPort1, kaf);
 
