@@ -25,21 +25,21 @@ public class test_kafka {
             Thread thread1 = new Thread(test2);
             thread1.start();*/
 
-        ArrayList<String> cc = yy2.coll(1000);
+        //ArrayList<String> cc = yy2.coll(1000);
 
 
-kaf.deleteTopics("test2");
-       //kaf.createTopics("test1",3,1);
+//kaf.deleteTopics("test3");
+      //kaf.createTopics("test89",3,1);
         //-1 =0 0=2
         //kaf.insertTopic("test1",cc);
-     //kaf.insert_Topic_partition("test1", "2", cc);
+    kaf.insertTopic("test1","1", "nihao nimei".split(" "));
        // kaf.insertTopic("test1",cc);
-  /* ArrayList rt=kaf.cousumertopic("test1","1","nimei","earliest");
+ /*  ArrayList rt=kaf.cousumertopic("test","1","nimei","earliest");
         for (int r=0;r<rt.size();r++)
         {
             System.out.println(rt.get(r));
         }*/
-        //kaf.describetopics("test2");
+        //kaf.describetopics("test3");
  //long tt= kaf.getPartitionsOffset("test1",2);
 
 

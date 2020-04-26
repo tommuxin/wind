@@ -66,7 +66,7 @@ public interface Read_usb {
      * @param
      *
      */
-    public void addListener(SerialPort serialPort, KafkaUtil ka1);
+    public void addListener(SerialPort serialPort, KafkaUtil ka1,String topic_name);
 
 
 }

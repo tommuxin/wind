@@ -56,30 +56,26 @@ public class TestWriteUsb implements Write_usb {
         OutputStream out = null;
         InputStream in = null;
         byte[] bytes = {};
-         ArrayList<String> send_msg=new ArrayList<String>();
-        String re=null;
-        int count=0;
-
         try {
             out = serialPort.getOutputStream();
             out.write(order);
             out.flush();
             out.close();
-            in=serialPort.getInputStream();
+            Thread.sleep(500);
+            in=serialPort.getInputStream();//读取返回值
+            byte[] readBuffer1 = new byte[1024];
 
-            in.close();
-            byte[] readBuffer1 = new byte[1];
             int bytesNum = in.read(readBuffer1);
             while (bytesNum >0) {
                 bytes = ArrayUtils.concat(bytes, readBuffer1);
                 bytesNum = in.read(readBuffer1);
                 re_msg=new String(bytes);
             }
-            System.out.println("已被消费："+re_msg );
             in.close();
-            out.flush();
-            out.close();
+            System.out.println("已被消费："+re_msg );
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             try {

@@ -7,10 +7,7 @@ import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Partitioner;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.*;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.requests.MetadataResponse;
@@ -18,10 +15,7 @@ import org.apache.kafka.common.utils.Utils;
 import wind.Until.ConfigUntil;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -35,6 +29,7 @@ public class KafkaUtil {
         kafka_properties = new Properties();
         // 指定bootstrap.servers属性。必填，无默认值。用于创建向kafka broker服务器的连接。
         kafka_properties.put("bootstrap.servers", ConfigUntil.getConfig("kafka.hosts"));
+        //kafka_properties.put("","");
         // 指定key.serializer属性。必填，无默认值。被发送到broker端的任何消息的格式都必须是字节数组。
         // 因此消息的各个组件都必须首先做序列化，然后才能发送到broker。该参数就是为消息的key做序列化只用的。
         kafka_properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -47,7 +42,7 @@ public class KafkaUtil {
         kafka_properties.put("acks", "-1");
         //props.put(ProducerConfig.ACKS_CONFIG, "1");
         //在producer内部自动实现了消息重新发送。默认值0代表不进行重试。
-        kafka_properties.put("retries", 3);
+        kafka_properties.put("retries", 0);
         //props.put(ProducerConfig.RETRIES_CONFIG, 3);
         //调优producer吞吐量和延时性能指标都有非常重要作用。默认值16384即16KB。
         kafka_properties.put("batch.size", 323840);
@@ -60,6 +55,7 @@ public class KafkaUtil {
         //props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         kafka_properties.put("max.block.ms", 3000);
         kafka_properties.put("partitioner.class", "wind.Until.MyPartitioner");
+        kafka_properties.put("auto.create.topics.enable","false ");
         //是否设置自动提交
         // kafka_properties.put("enable.auto.commit", "false");
         //props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 3000);
@@ -89,13 +85,13 @@ public class KafkaUtil {
      */
 
 
-    public void insertTopic(String topic_name, ArrayList list_re) {
+    public boolean insertTopic(String topic_name, ArrayList list_re) {
         producer = new KafkaProducer<>(kafka_properties);
-
+        boolean sucess = true;
         for (int i = 0; i < list_re.size(); i++) {
             //构造好kafkaProducer实例以后，下一步就是构造消息实例。
-            producer.send(new ProducerRecord<>(topic_name, "1", list_re.get(i).toString()));
-
+            Future<RecordMetadata> resu = producer.send(new ProducerRecord<>(topic_name, "1", list_re.get(i).toString()));
+            sucess = resu.isDone();
             // 构造待发送的消息对象ProduceRecord的对象，指定消息要发送到的topic主题，分区以及对应的key和value键值对。Integer.toString(i)
             // 注意，分区和key信息可以不用指定，由kafka自行确定目标分区。
             //ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("my-topic",
@@ -105,16 +101,19 @@ public class KafkaUtil {
         }
         System.out.println("消息生产结束......");
         // 关闭kafkaProduce对象
+        producer.flush();
         producer.close();
         System.out.println("关闭生产者......");
+        return sucess;
 
     }
 
-    public void insertTopic(String topic_name, String list_re) {
+    public boolean insertTopic(String topic_name, String partion_id, String list_re) {
         producer = new KafkaProducer<>(kafka_properties);
+        boolean sucess = true;
         //构造好kafkaProducer实例以后，下一步就是构造消息实例。
-        producer.send(new ProducerRecord<>(topic_name, "1", list_re));
-
+        Future<RecordMetadata> resu = producer.send(new ProducerRecord<>(topic_name, partion_id, list_re));
+        sucess = resu.isDone();
         // 构造待发送的消息对象ProduceRecord的对象，指定消息要发送到的topic主题，分区以及对应的key和value键值对。Integer.toString(i)
         // 注意，分区和key信息可以不用指定，由kafka自行确定目标分区。
         //ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("my-topic",
@@ -124,8 +123,10 @@ public class KafkaUtil {
 
         System.out.println("消息生产结束......");
         // 关闭kafkaProduce对象
+        producer.flush();
         producer.close();
         System.out.println("关闭生产者......");
+        return sucess;
 
     }
 
@@ -135,35 +136,41 @@ public class KafkaUtil {
      * list_re 插入topic 的数据集合
      * partion_id 需要插入的分区id
      */
-    public void insertTopic(String topic_name, String partion_id, ArrayList list_re) {
+    public boolean insertTopic(String topic_name, String partion_id, ArrayList list_re) {
 
         producer = new KafkaProducer<>(kafka_properties);
-
+        boolean sucess = true;
         for (int i = 0; i < list_re.size(); i++) {
             //构造好kafkaProducer实例以后，下一步就是构造消息实例。
-            producer.send(new ProducerRecord<String, String>(topic_name, partion_id, list_re.get(i).toString()));
+            Future<RecordMetadata> resu = producer.send(new ProducerRecord<String, String>(topic_name, partion_id, list_re.get(i).toString()));
+            sucess = resu.isDone();
         }
         System.out.println("消息生产结束......");
         // 关闭kafkaProduce对象
-        producer.close();
+
 
         System.out.println("关闭生产者......");
+        producer.flush();
+        producer.close();
+        return sucess;
 
     }
 
-    public int insertTopic(String topic_name, String partion_id, String[] list_re) {
+    public boolean insertTopic(String topic_name, String partion_id, String[] list_re) throws ExecutionException, InterruptedException {
 
         producer = new KafkaProducer<>(kafka_properties);
-        int sucess = 0;
+        boolean sucess = true;
         for (int i = 0; i < list_re.length; i++) {
             //构造好kafkaProducer实例以后，下一步就是构造消息实例。
-            producer.send(new ProducerRecord<String, String>(topic_name, partion_id, list_re[i].toString()));
-            sucess = 1;
+            Future<RecordMetadata> resu = producer.send(new ProducerRecord<String, String>(topic_name, partion_id, list_re[i].toString()));
+            sucess = resu.isDone();
+
         }
+
         System.out.println("消息生产结束......");
+        producer.flush();
         // 关闭kafkaProduce对象
         producer.close();
-
         System.out.println("关闭生产者......");
         return sucess;
     }
