@@ -17,7 +17,12 @@ public class TestReadUsb implements Read_usb {
     public static String portName;
     public static int baudrate;
     public static ArrayList<String> resu;
-
+    // 输入流
+    private InputStream inputStream;
+    // 输出流
+    private OutputStream outputStream;
+    // 保存串口返回信息
+    private String data;
 
     public TestReadUsb(String portName, int baudrate) {
         this.portName = portName;
@@ -81,13 +86,14 @@ public class TestReadUsb implements Read_usb {
             in = serialPort.getInputStream();
             // 缓冲区大小为一个字节
             byte[] readBuffer = new byte[1];
-            int bytesNum = in.read(readBuffer, 0, 1);
+            int bytesNum = in.read(readBuffer);
 
             while (bytesNum > 0) {
                 bytes = ArrayUtils.concat(bytes, readBuffer);
                 bytesNum = in.read(readBuffer);
             }
             in.close();
+            in=null;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -103,6 +109,7 @@ public class TestReadUsb implements Read_usb {
         }
         return bytes;
     }
+
 
     @Override
     public void addListener(SerialPort serialPort, KafkaUtil ka1,String topic_name) {
@@ -127,11 +134,11 @@ public class TestReadUsb implements Read_usb {
                         //定义分隔符，这边测试用换行符，实际某些字段中会存在换行符导致字段错乱
                         msg1 = msg.split("\n");
 
-                     /*  for (int i=0;i<msg1.length;i++){
+                        for (int i=0;i<msg1.length;i++){
 
-                           System.out.println(msg1[i]);
+                            System.out.println(msg1[i]);
 
-                       }*/
+                        }
                         //批量插入kafka
                         scuss = ka1.insertTopic(topic_name, "1", msg1);
                         System.out.println("sssssssssss"+scuss);

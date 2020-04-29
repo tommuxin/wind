@@ -28,13 +28,13 @@ public class test_kafka {
         //ArrayList<String> cc = yy2.coll(1000);
 
 
-//kaf.deleteTopics("test3");
-      //kaf.createTopics("test89",3,1);
+kaf.deleteTopics("test100");
+      //kaf.createTopics("test100",3,1);
         //-1 =0 0=2
         //kaf.insertTopic("test1",cc);
-    kaf.insertTopic("test1","1", "nihao nimei".split(" "));
+    //kaf.insertTopic("test1","1", "nihao nimei".split(" "));
        // kaf.insertTopic("test1",cc);
- /*  ArrayList rt=kaf.cousumertopic("test","1","nimei","earliest");
+ /*  ArrayList rt=kaf.cousumertopic("test10","1","nimei","earliest");
         for (int r=0;r<rt.size();r++)
         {
             System.out.println(rt.get(r));
