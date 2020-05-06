@@ -61,9 +61,9 @@ public class TestWriteUsb implements Write_usb {
             out.write(order);
             out.flush();
             out.close();
-            Thread.sleep(500);
+            Thread.sleep(5000);
             in=serialPort.getInputStream();//读取返回值
-            byte[] readBuffer1 = new byte[1024];
+            byte[] readBuffer1 = new byte[1];
 
             int bytesNum = in.read(readBuffer1);
             while (bytesNum >0) {

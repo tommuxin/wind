@@ -240,9 +240,11 @@ public class TestReadUsb implements Read_usb {
 
     public static void main(String[] args) {
         KafkaUtil kaf = new KafkaUtil();
-        TestReadUsb rt = new TestReadUsb("COM3", 115200);
+        TestReadUsb rt = new TestReadUsb("COM4", 115200);
         SerialPort serialPort1 = rt.openPort();
-        rt.addListener(serialPort1, kaf,"test9");
+        rt.addListener(serialPort1, kaf,"test100");
+
+
 
     }
 
