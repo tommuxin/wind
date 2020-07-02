@@ -15,7 +15,7 @@
         <impala.version>3.2.0-cdh6.2.1</impala.version>
         <hbase.version>2.1.0-cdh6.2.1</hbase.version>
         <kafka.version>2.1.0-cdh6.2.1</kafka.version>
-        <mysql.version>5.1.27</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
     </properties>
     <dependencyManagement>
         <dependencies>
